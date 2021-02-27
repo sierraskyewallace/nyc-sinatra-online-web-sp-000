@@ -33,4 +33,3 @@ class LandmarksController < ApplicationController
     redirect '/landmarks'
   end
 end
-end
