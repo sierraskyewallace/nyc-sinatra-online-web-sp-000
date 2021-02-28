@@ -1,21 +1,21 @@
 class LandmarksController < ApplicationController
   
-  get '/landmarks' do
-    @landmarks = Landmark.all
-    @figures = Figure.all
-    erb :'landmarks/index'
+  get '/landmarks' do    #read - shows index page for landmarks 
+      @landmarks = Landmark.all 
+      @figures = Figure.all
+      erb :'landmarks/index'
   end
 
-  get '/landmarks/new' do
-    erb :"landmarks/new"
+  get '/landmarks/new' do   #create - shows new page to create landmarks 
+      erb :'landmarks/new'
   end
 
-  get '/landmarks/:id' do
-    @landmark = Landmark.find(params[:id])
-    erb :"landmarks/show"
+  get '/landmarks/:id' do  #shows = shows landmark by id
+      @landmarks = Landmark.find(params[:id])
+      erb :"landmarks/show"
   end
 
-  get '/landmarks/:id/edit' do
+  get '/landmarks/:id/edit' do  #update - shows edit page to edit landmarks
     @landmark = Landmark.find(params[:id])
     erb :"landmarks/edit"
   end
