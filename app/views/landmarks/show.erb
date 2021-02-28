@@ -4,10 +4,11 @@
     <th>Year Completed</th>
   </tr>
   <tr>
-    <td><%= @landmark.name %></td>
-    <td><%= @landmark.year_completed %></td>
+    <td><%= @landmarks.name %></td>
+    <td><%= @landmarks.year_completed %></td>
   </tr>
 <table>
 
-<a class="button" href="/landmarks/<%= @landmark.id %>/edit">Edit Landmark</a>
+<a class="button" href="/landmarks/<%= @landmarks.id %>/edit">Edit Landmark</a>
+<br>
 <a class="button" href="/landmarks">Landmarks</a>

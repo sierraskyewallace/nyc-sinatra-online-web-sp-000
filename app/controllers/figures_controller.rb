@@ -1,80 +1,47 @@
 class FiguresController < ApplicationController 
 
-  get '/figures' do
+  get '/figures' do  #read - shows all figures 
+    @figures = Figure.all 
     erb :'/figures/index'
   end
 
-  get '/figures/new' do
+  get '/figures/new' do  #read - shows new figures and titles 
+    @titles = Title.all
     erb :'/figures/new'
   end
 
-  post '/figures' do
-    @figure = Figure.create(name: params[:figure][:name])
-
-    if !params[:figure][:title_ids].nil?
-      params[:figure][:title_ids].each do |t|
-        @figure.titles << Title.find(t)
-      end
+  post '/figures' do  #create - shows new page of landmark  
+      @figures = Figure.create(params['figure'])
+    unless params[:landmark][:name].empty?
+      @figures.landmarks << Landmark.create(params[:landmark])
     end
-
-    if !params[:title][:name].strip.empty?
-      @figure.titles << Title.create(name: params[:title][:name])
+    unless params[:title][:name].empty?
+      @figures.titles << Title.create(params[:title])
     end
+    @figures.save
+    redirect to "/figures/#{@figures.id}"
+  end 
 
-    if !params[:figure][:landmark_ids].nil?
-      params[:figure][:landmark_ids].each do |l|
-        @figure.landmarks << Landmark.find(l)
-      end
-    end
-
-    if !params[:landmark][:name].strip.empty?
-      @figure.landmarks << Landmark.create(name: params[:landmark][:name])
-    end
-
-    if !params[:title][:name].empty?
-      @title = Title.create(name: params[:title][:name])
-      @figure.titles << @title
-    end
-
-    @figure.save
-    redirect "/figures/#{@figure.id}"
-  end
-
-  get "/figures/:id/edit" do
+  get '/figures/:id/edit' do
     @figure = Figure.find(params[:id])
-    erb :'/figures/edit'
+    erb :'figures/edit'
   end
 
-  patch '/figures/:id' do
-    @figure = Figure.find(params[:id])
-
-    @figure.name = params[:figure][:name]
-
-    if !params[:figure][:title_ids].nil?
-      params[:figure][:title_ids].each do |title_id|
-        @figure.titles << Title.find(title_id)
+  patch '/figures/:id' do  #update - shows page where you actually edit figures by id 
+    @figures = Figure.find_by_id(params[:id])
+      @figures.update(params[:figure])
+      unless params[:title][:name].empty?
+        @figures.titles << Title.create(params[:title])
       end
-    end
-
-    if !params[:title][:name].strip.empty?
-      @figure.titles << Title.create(name: params[:title][:name])
-    end
-
-    if !params[:figure][:landmark_ids].nil?
-      params[:figure][:landmark_ids].each do |landmark_id|
-        @figure.landmarks << Landmark.find(landmark_id)
+      unless params[:landmark][:name].empty?
+        @figures.landmarks << Landmark.create(params[:landmark])
       end
-    end
-
-    if !params[:landmark][:name].strip.empty?
-      @figure.landmarks << Landmark.create(name: params[:landmark][:name])
-    end
-    @figure.save
-    redirect to "/figures/#{@figure.id}"
+      @figures.save
+      redirect to "/figures/#{@figures.id}"
   end
-
-  get "/figures/:id" do
-    @figure = Figure.find(params[:id])
-    erb :'/figures/show'
+  get '/figures/:id' do
+    @figures = Figure.find(params[:id])
+    erb :'figures/show'
   end
+end
 
